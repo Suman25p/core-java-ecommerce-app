@@ -1,0 +1,84 @@
+package com.ecommerce.main;
+
+import java.util.List;
+import java.util.Scanner;
+
+import com.ecommerce.exception.OutOfStockException;
+import com.ecommerce.model.Product;
+import com.ecommerce.service.CartService;
+import com.ecommerce.service.ProductService;
+
+public class MainDriver {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		ProductService productService = new ProductService();
+		CartService cartService = new CartService();
+		
+		productService.loadProducts();
+		
+		while(true) {
+			System.out.println("\n1. View Products");
+			System.out.println("2. Search Product");
+			System.out.println("3. Add to Cart");
+			System.out.println("4. View Cart");
+			System.out.println("5. Checkout");
+			System.out.println("6. Exit");
+			
+			int choice = sc.nextInt();
+			
+			switch(choice) {
+			case 1: 
+				productService.displayProducts();
+				break;
+			
+			case 2: 
+				System.out.println("Enter product name: ");
+				String name = sc.next();
+				List<Product> results = productService.searchByName(name);
+				results.forEach(System.out::println);
+				break;
+			
+			case 3:
+				System.out.println("Enter Product ID: ");
+				int id = sc.nextInt();
+				System.out.println("Enter quantity: " );
+				int qty = sc.nextInt();
+				
+				Product product = productService.getProductById(id);
+				
+				try {
+					cartService.addToCart(product, qty);
+					System.out.println("Added to cart!");
+				} catch(OutOfStockException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+			
+			
+			case 4:
+				cartService.viewCart();
+				break;
+			case 5:
+				if(cartService.isCartEmpty()) {
+					System.out.println("Cart is empty!");
+					break;
+				}
+				
+				double total = cartService.calculateTotal();
+				
+				cartService.reduceStock();
+				cartService.clearCart();
+				
+				System.out.println("Final Bill:  Rs. " + total);
+				
+				System.out.println("Checkout successful!");
+				
+				break;
+				
+			case 6: 
+				return;
+			}
+		} 
+	}
+}

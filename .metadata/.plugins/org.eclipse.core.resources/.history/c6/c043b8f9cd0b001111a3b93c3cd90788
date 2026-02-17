@@ -1,0 +1,29 @@
+package com.ecommerce.service;
+
+import java.util.Map;
+
+import com.ecommerce.exception.OutOfStockException;
+import com.ecommerce.model.Product;
+
+public class CheckoutProcess {
+	CartService cartService = new CartService();
+	
+	public void checkOut(Map<Product,Integer> cart) throws OutOfStockException
+	{
+		if(cart.isEmpty()) {
+			System.out.println("Cart is empty! choose your product");
+			return;
+		}
+		
+		for(Map.Entry<Product, Integer> entry: cart.entrySet()) {
+			Product product = entry.getKey();
+			int quantity = entry.getValue();
+			
+			if(product.getStock() < quantity) {
+				throw new OutOfStockException(product.getName() + " is out of stock");
+			}
+		}
+		
+		
+	}
+}

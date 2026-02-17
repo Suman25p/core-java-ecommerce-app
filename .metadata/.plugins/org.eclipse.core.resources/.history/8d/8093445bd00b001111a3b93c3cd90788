@@ -1,0 +1,55 @@
+package com.ecommerce.service;
+
+import java.util.Map;
+
+import com.ecommerce.exception.OutOfStockException;
+import com.ecommerce.model.Product;
+
+public class CheckoutProcess {
+	
+	ProductManagement productManagement = new ProductManagement();
+	CartManagement cartManagement = new CartManagement();
+	
+	public void checkOut(Map<Product,Integer> cart) throws OutOfStockException
+	{
+		if(cart.isEmpty()) {
+			System.out.println("Cart is empty! choose your product");
+			return;
+		}
+		
+		for(Map.Entry<Product, Integer> entry: cart.entrySet()) {
+			Product product = entry.getKey();
+			int quantity = entry.getValue();
+			
+			if(product.getStock() < quantity) {
+				throw new OutOfStockException(product.getName() + " is out of stock");
+			}
+		}
+		
+		
+		double totalPrice = 0;
+		
+		System.out.println("---Final Bill---");
+		
+		for(Map.Entry<Product, Integer> entry : cart.entrySet()) {
+			Product product = entry.getKey();
+			int quantity = entry.getValue();
+			
+			double subTotal = product.getPrice() * quantity;
+			
+			totalPrice = totalPrice + subTotal;
+			
+			System.out.println(product.getName() + ",  Qty: " + quantity + " , SubTotal: Rs. " + subTotal);
+		}
+		
+		System.out.println("======================");
+		System.out.println("Total Amount: Rs." + totalPrice);
+		
+		cartManagement.reduceStock();
+		
+		cart.clear();
+		
+		System.out.println("Checkout successful!");
+		
+	}
+}

@@ -1,0 +1,55 @@
+package com.ecommerce.service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.ecommerce.exception.OutOfStockException;
+import com.ecommerce.model.Product;
+
+public class CartService {
+	
+	private Map<Product, Integer> cart = new HashMap<>();
+	
+	public void addToCart(Product product, int quantity) throws OutOfStockException {
+		if(product.getStock() < quantity) {
+			throw new OutOfStockException("Stock not available");
+		}
+		
+		cart.put(product, cart.getOrDefault(product, 0) + quantity);
+	}
+	
+	public void removeFromCart(Product product) 
+	{
+		cart.remove(product);
+	}
+	
+	public void viewCart() {
+		cart.forEach((product, qty) -> 
+			System.out.println(product.getName() + 
+						" | Qty: " + qty +
+						" | Subtotal: Rs." + 
+						(product.getPrice() * qty)));
+	}
+	
+	public double calculateTotal() {
+		return cart.entrySet()
+				.stream()
+				.mapToDouble( e -> 
+				e.getKey().getPrice() * e.getValue())
+				.sum();
+	}
+	
+	public void reduceStock()
+	{
+		cart.forEach((product,qty) -> product.setStock(product.getStock() - qty));
+	}
+	
+	public void clearCart()
+	{
+		cart.clear();
+	}
+	
+	public boolean isCartEmpty() {
+		return cart.isEmpty();
+	}
+}
