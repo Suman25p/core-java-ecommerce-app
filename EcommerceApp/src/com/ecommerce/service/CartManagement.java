@@ -12,54 +12,59 @@ public class CartManagement {
 	Products product;
 	private HashMap<Products, Integer> cart = new HashMap<>();
 	
-	public void addToCart(Products product, int quantity) throws OutOfStockException {
-		
-		if(product == null && quantity <= 0) {
-			System.out.println("Product not valid");
-		}
-		if(product.getStock() < quantity) {
-			throw new OutOfStockException("Stock not available");
-		}
-		
-		if(cart.containsKey(product)) {
-			int existingQty = cart.get(product);
-			cart.put(product, existingQty + quantity);
-		} else {
-			cart.put(product, quantity);
-		}
-	}
+	public void addToCart(Products product, int quantity)
+            throws OutOfStockException {
+
+        if (product == null)
+            throw new IllegalArgumentException("Invalid product.");
+
+        if (quantity <= 0)
+            throw new IllegalArgumentException("Invalid quantity.");
+
+        if (product.getStock() < quantity)
+            throw new OutOfStockException("Stock not available.");
+
+        int existingQty = cart.getOrDefault(product, 0);
+
+        int totalRequested = existingQty + quantity;
+
+        if (totalRequested > product.getStock()) {
+            throw new OutOfStockException(
+                    "Only " + product.getStock() +
+                    " items available in stock. " +
+                    "Already added: " + existingQty);
+        }
+
+        cart.put(product, totalRequested);
+    }
+
 	
-	public HashMap<Products, Integer> getCart(){
-		return cart;
-	}
-	
-	
-	public void removeFromCart(Products product, int quantity)
-	 {
+	public void removeFromCart(Products product, int quantity) {
 
 	    if (product == null) {
-	        System.out.println("Invalid product.");
+	        throw new IllegalArgumentException("Invalid product.");
 	    }
 
 	    if (quantity <= 0) {
-	        System.out.println("Quantity must be greater than zero.");
+	        throw new IllegalArgumentException("Quantity must be greater than zero.");
 	    }
 
 	    if (!cart.containsKey(product)) {
-	        System.out.println(product.getName() + " is not in the cart.");
+	        throw new IllegalArgumentException(product.getName() + " not in cart.");
 	    }
 
 	    int existingQty = cart.get(product);
 
-	   
 	    if (quantity >= existingQty) {
 	        cart.remove(product);
-	        System.out.println(product.getName() + " removed from cart.");
+	        System.out.println("Product removed successfully from cart!");
 	    } else {
 	        cart.put(product, existingQty - quantity);
-	        System.out.println("Quantity updated successfully!");
+	        System.out.println("Product removed successfully from cart!");
 	    }
+	    
 	}
+
 
 	public void viewCart() {
 		if (cart.isEmpty()) {
@@ -92,19 +97,18 @@ public class CartManagement {
 		return totalPrice;
 	}
 
-	public void reduceStock()
-	{
-		cart.forEach((product,qty) -> {
-			int currentStock = product.getStock();
-			int newStock = currentStock - qty;
-			
-			product.setStock(newStock);
-		});
-	}
+	public void reduceStock() {
+        cart.forEach((product, qty) ->
+                product.setStock(product.getStock() - qty));
+    }
 	
 	public void clearCart()
 	{
 		cart.clear();
+	}
+	
+	public Map<Products, Integer> getCart(){
+	    return new HashMap<>(cart);
 	}
 	
 }

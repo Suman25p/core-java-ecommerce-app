@@ -28,27 +28,31 @@ public class CheckoutProcess {
 				}
 			}
 		
-			System.out.println("------- Final Bill -------");
+			System.out.println("------------- Final Bill ---------------");
 
 		    double totalPrice = 0.0;
-		  //  double gst = 0.10;
+		    double gst = 0.10;
 		    for (Map.Entry<Products, Integer> entry : cart.entrySet()) {
 
 		        Products product = entry.getKey();
 		        int quantity = entry.getValue();
 
 		        double subtotal = product.getPrice() * quantity;
-		       // totalPrice += subtotal + (subtotal * gst);
-		        totalPrice += subtotal;
+		        totalPrice += subtotal + (subtotal * gst);
+		      
 		        System.out.println(product.getName()
 		                + " | Qty: " + quantity
-		                + " | Subtotal: Rs." + subtotal);
+		                + " | Subtotal: Rs." + subtotal + "| GST applied : 10%");
 		    
 
-		        System.out.println("======================");
+		        System.out.println("------------------------------------------");
 		        System.out.println("Total Amount: Rs." + totalPrice);
 		    }
-			cartManagement.reduceStock();
+		 // Reducing stock AFTER validation
+		    cart.forEach((product, qty) ->
+		            product.setStock(product.getStock() - qty));
+		    
+//			cartManagement.reduceStock();
 		
 			cart.clear();
 		
@@ -57,4 +61,5 @@ public class CheckoutProcess {
 	}
 }
 	
+
 

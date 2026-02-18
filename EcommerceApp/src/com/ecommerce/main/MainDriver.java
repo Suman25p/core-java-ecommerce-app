@@ -3,6 +3,7 @@ package com.ecommerce.main;
 import java.util.List;
 import java.util.Scanner;
 
+import com.ecommerce.exception.OutOfStockException;
 import com.ecommerce.model.Products;
 import com.ecommerce.service.CartManagement;
 import com.ecommerce.service.CheckoutProcess;
@@ -20,7 +21,8 @@ public class MainDriver {
 			productManagement.addAllProducts();
 			
 			while(true) {
-				System.out.println("===== ++++  WELCOME ! +++ ===== ");
+				System.out.println("========== ++++  WELCOME ! +++ =========\n ");
+				
 				System.out.println("1. View Products");
 				System.out.println("2. Search Product");
 				System.out.println("3. Sort By Price in Assending");
@@ -30,7 +32,7 @@ public class MainDriver {
 				System.out.println("7. View Cart");
 				System.out.println("8. Checkout");
 				System.out.println("9. Exit\n");
-				
+				System.out.println("Enter your preference: ");
 				int selectPreference = sc.nextInt();
 				
 				
@@ -70,7 +72,7 @@ public class MainDriver {
 						cartManagement.addToCart(product, qty);
 						System.out.println("Added to cart!");
 						} catch(Exception e) {
-							System.out.println("Not valid product,plz choose valid productId");
+							System.out.println("plz choose valid productId or choose under stock ");
 						}
 						
 						break;
@@ -101,7 +103,11 @@ public class MainDriver {
 						break;
 						
 					case 8:
+						try {
 						checkoutProcess.checkOut(cartManagement.getCart());
+						}catch(OutOfStockException e) {
+							System.out.println("Out of stock..");
+						}
 						break;
 						
 					case 9: 
@@ -118,3 +124,4 @@ public class MainDriver {
 	} 
 	
 }
+
