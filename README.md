@@ -68,37 +68,16 @@ com.ecommerce.main.MainDriver
 ---
 
 ## 🖥 Sample Output
-========== WELCOME ==========
+<img width="1366" height="768" alt="Screenshot (718)" src="https://github.com/user-attachments/assets/1328b603-4d91-4b8f-bfe9-90df3c24c4e8" />
+<img width="1366" height="768" alt="Screenshot (719)" src="https://github.com/user-attachments/assets/64ec1e1d-14bd-4d2d-b258-06f23063c2c0" />
+<img width="1366" height="768" alt="Screenshot (720)" src="https://github.com/user-attachments/assets/1cd75ab7-3bc7-4ee9-a1bb-ac47d5e2e424" />
+<img width="1366" height="768" alt="Screenshot (721)" src="https://github.com/user-attachments/assets/a87be729-24f2-4a20-9bf2-8423c574c612" />
+<img width="1366" height="768" alt="Screenshot (722)" src="https://github.com/user-attachments/assets/97d565e3-c474-4f2f-ab99-731f0cb237ea" />
+<img width="1366" height="768" alt="Screenshot (723)" src="https://github.com/user-attachments/assets/497d4251-13f7-4af6-8768-ad2be2d85f3e" />
 
-1.View Products
-2. Search Product
-3.Sort Price Asc
-4.Sort Price Desc
-5.Add to Cart
-6.Remove from Cart
-7.View Cart
-8.Checkout
-9.Exit
 
-Enter your preference: 5
-Enter Product ID: 2
-Enter Quantity: 2
-Added to cart successfully!
-========== WELCOME ==========
 
-1.View Products
-2. Search Product
-3.Sort Price Asc
-4.Sort Price Desc
-5.Add to Cart
-6.Remove from Cart
-7.View Cart
-8.Checkout
-9.Exit
 
-Enter your preference: 8
-------------- Final Bill ---------------
-Mobile | Qty: 2 | Subtotal: Rs.52000
-GST (10%): Rs.5200
-Total Amount: Rs.57200
-Checkout successful!
+
+
+
