@@ -1,0 +1,72 @@
+package com.ecommerce.model;
+
+import java.util.Objects;
+
+public class Products {
+	private int id;
+	private String name;
+	private double price;
+	private int stock;
+	
+	public Products(int _id, String _name, double _price, int _stock) {
+		
+		this.id = _id;
+		this.name = _name;
+		this.price = _price;
+		this.stock = _stock;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+//	public void setId(int id) {
+//		this.id = id;
+//	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getStock() {
+		return stock;
+	}
+
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		Products product = (Products) obj;
+		return this.id == product.id;	
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(id);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Id: " + id + 
+				", Name: " + name + 
+				", Price: Rs." + price + 
+				", Stock: " + stock;
+	}	
+}

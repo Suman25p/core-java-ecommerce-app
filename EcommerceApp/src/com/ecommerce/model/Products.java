@@ -51,6 +51,11 @@ public class Products {
 	@Override
 	public boolean equals(Object obj)
 	{
+		if (this == obj) return true;
+
+	    if (obj == null || getClass() != obj.getClass())
+	        return false;
+	    
 		Products product = (Products) obj;
 		return this.id == product.id;	
 	}
@@ -64,9 +69,9 @@ public class Products {
 	@Override
 	public String toString()
 	{
-		return "Id: " + id + 
-				", Name: " + name + 
-				", Price: Rs." + price + 
-				", Stock: " + stock;
+		return "Id -> " + id + 
+				", Name -> " + name + 
+				", Price -> Rs. ->" + price + 
+				", Stock -> " + stock;
 	}	
 }

@@ -1,0 +1,110 @@
+package com.ecommerce.service;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import com.ecommerce.exception.OutOfStockException;
+import com.ecommerce.exception.ProductNotAvailableException;
+import com.ecommerce.model.Products;
+
+public class CartManagement {
+	
+	Products product;
+	private HashMap<Products, Integer> cart = new HashMap<>();
+	
+	public void addToCart(Products product, int quantity) throws OutOfStockException {
+		
+		if(product == null && quantity <= 0) {
+			System.out.println("Product not valid");
+		}
+		if(product.getStock() < quantity) {
+			throw new OutOfStockException("Stock not available");
+		}
+		
+		if(cart.containsKey(product)) {
+			int existingQty = cart.get(product);
+			cart.put(product, existingQty + quantity);
+		} else {
+			cart.put(product, quantity);
+		}
+	}
+	
+	public HashMap<Products, Integer> getCart(){
+		return cart;
+	}
+	
+	
+	public void removeFromCart(Products product, int quantity)
+	        throws ProductNotAvailableException {
+
+	    if (product == null) {
+	        throw new ProductNotAvailableException("Invalid product.");
+	    }
+
+	    if (quantity <= 0) {
+	        throw new IllegalArgumentException(
+	                "Quantity must be greater than zero.");
+	    }
+
+	    if (!cart.containsKey(product)) {
+	        throw new ProductNotAvailableException(
+	                product.getName() + " is not in the cart.");
+	    }
+
+	    int existingQty = cart.get(product);
+
+	   
+	    if (quantity >= existingQty) {
+	        cart.remove(product);
+	        System.out.println(product.getName() + " removed from cart.");
+	    } else {
+	        cart.put(product, existingQty - quantity);
+	        System.out.println("Quantity updated successfully!");
+	    }
+	}
+
+	public void viewCart() {
+		if(product == null) {
+			System.out.println("No product added!");
+		}
+		cart.forEach((product, qty) -> {
+			double subTotal = product.getPrice() * qty;
+			
+			System.out.println(product.getName() + " | Qty: " + qty + " | SubTotal: Rs. " + subTotal);
+		});
+	}
+	
+	public double calculateTotal() {
+		double totalPrice = 0;
+		
+		Iterator<Map.Entry<Products, Integer>> iterator =
+				cart.entrySet().iterator();
+		
+		while (iterator.hasNext()) {
+	        Map.Entry<Products, Integer> entry = iterator.next();
+
+	        Products product = entry.getKey();
+	        int quantity = entry.getValue();
+
+	        totalPrice += product.getPrice() * quantity;
+	    }
+		return totalPrice;
+	}
+
+	public void reduceStock()
+	{
+		cart.forEach((product,qty) -> {
+			int currentStock = product.getStock();
+			int newStock = currentStock - qty;
+			
+			product.setStock(newStock);
+		});
+	}
+	
+	public void clearCart()
+	{
+		cart.clear();
+	}
+	
+}

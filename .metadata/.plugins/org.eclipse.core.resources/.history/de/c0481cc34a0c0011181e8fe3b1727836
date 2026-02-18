@@ -1,0 +1,13 @@
+package com.ecommerce.exception;
+
+public class ProductNotAvailableException extends Exception
+{
+	public ProductNotAvailableException(String message)
+	{
+		super(message);
+	}
+
+	public static void main(String[] args) {
+		new Products(20, "Mobile pro", 27000, 5)
+	}
+}

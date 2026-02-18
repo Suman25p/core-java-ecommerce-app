@@ -5,66 +5,74 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
-import com.ecommerce.exception.ProductNotAvailableException;
 import com.ecommerce.model.Products;
 
 public class ProductManagement {
 	
 	private List<Products > productsList = new ArrayList<>();
-	
+		
 	public void addAllProducts() {
 		productsList.addAll(Arrays.asList(
 				new Products(1, "Laptop", 50000, 5),
 				new Products(2, "Mobile", 26000, 10),
-				new Products(2, "Mobile", 27000, 5),
 				new Products(3, "HeadPhones", 2000, 15),
 				new Products(4, "Keyboard", 1500, 20),
 				new Products(5, "Mouse", 800, 25),
-//				new Products(6, "Monitor", 12000, 8),
-//				new Products(7, "Printer", 9000, 2),
-//				new Products(8, "Tablet", 18000, 5),
-//				new Products(9, "SmartWatch", 7000, 5),
+				new Products(6, "Monitor", 12000, 8),
+				new Products(7, "Printer", 9000, 2),
+				new Products(8, "Tablet", 18000, 5),
+				new Products(9, "SmartWatch", 7000, 5),
 				new Products(10, "Speaker", 3000, 1),
 				new Products(11, "Speaker", 2500, 2),
-				new Products(12, "SmartWatch", 7000, 5)
+				new Products(12, "Speaker boat", 2500, 2),
+				new Products(13, "SmartWatch", 7000, 5),
+				new Products(20, "Mobile pro", 27000, 5)
 				));
 	}
 	
-	
-	public void displayProducts() throws ProductNotAvailableException
+	public void displayProducts() 
 	{	
-		try {
-			if(productsList.isEmpty()) 
-				throw new ProductNotAvailableException("No Products Available");
-			
-		}
-		finally {
-			
+		if(productsList.isEmpty()) { 
+			System.out.println("No Products Available");
+		}else {	
 			Iterator<Products> iterator = productsList.iterator();
-				
+		
 			while(iterator.hasNext()) {
-				System.out.println(iterator.next());
+			System.out.println(iterator.next());
+		
 			}
 		}
+	
 	}
 	
-	
-	public List<Products> searchByName(String name) throws ProductNotAvailableException {
+	public List<Products> searchByName(String name) {
 		
-		String lowercase = name.toLowerCase();
+		if(name == null ) {
+			System.out.println("Invalid input");
+		}
+		
+		String trimmedName = name.trim();
+		
+		if(trimmedName.isEmpty())
+		{
+			System.out.println("Invalid input give proper input ! " + name);
+		}
+		String lowerCase = name.trim().toLowerCase();
 		
 		List<Products> output =  productsList.stream()
 				.filter(n -> n.getName()
 				.toLowerCase()
-				.contains(lowercase))
+				.contains(lowerCase))
 				.collect(Collectors.toList());
 		
 		if(output.isEmpty())
 		{
-			throw new ProductNotAvailableException("Product is not available" + name);
+			System.out.println("Product not found ! " + name);
 		}
+		
 		return output;
 	}
 	
@@ -86,8 +94,8 @@ public class ProductManagement {
 	{
 		return productsList.stream()
 				.filter(p -> p.getId() == id)
-				.findFirst()
-				.orElseThrow();
+				.findFirst().get();
+				
 	}
 	
 }

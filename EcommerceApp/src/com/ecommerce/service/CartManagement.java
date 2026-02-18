@@ -5,14 +5,18 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.ecommerce.exception.OutOfStockException;
-import com.ecommerce.exception.ProductNotAvailableException;
 import com.ecommerce.model.Products;
 
 public class CartManagement {
 	
+	Products product;
 	private HashMap<Products, Integer> cart = new HashMap<>();
 	
 	public void addToCart(Products product, int quantity) throws OutOfStockException {
+		
+		if(product == null && quantity <= 0) {
+			System.out.println("Product not valid");
+		}
 		if(product.getStock() < quantity) {
 			throw new OutOfStockException("Stock not available");
 		}
@@ -31,30 +35,44 @@ public class CartManagement {
 	
 	
 	public void removeFromCart(Products product, int quantity)
-	        throws ProductNotAvailableException {
+	 {
+
+	    if (product == null) {
+	        System.out.println("Invalid product.");
+	    }
+
+	    if (quantity <= 0) {
+	        System.out.println("Quantity must be greater than zero.");
+	    }
 
 	    if (!cart.containsKey(product)) {
-	        throw new ProductNotAvailableException(
-	                product.getName() + " not in cart");
+	        System.out.println(product.getName() + " is not in the cart.");
 	    }
 
 	    int existingQty = cart.get(product);
 
+	   
 	    if (quantity >= existingQty) {
 	        cart.remove(product);
+	        System.out.println(product.getName() + " removed from cart.");
 	    } else {
 	        cart.put(product, existingQty - quantity);
+	        System.out.println("Quantity updated successfully!");
 	    }
-
-	    System.out.println("Cart updated successfully!");
 	}
 
 	public void viewCart() {
-		cart.forEach((product, qty) -> {
-			double subTotal = product.getPrice() * qty;
+		if (cart.isEmpty()) {
+	        System.out.println("Your cart is empty!");
+
+	    } else {
+	    	cart.forEach((product, qty) -> {
+	    	double subTotal = product.getPrice() * qty;
 			
-			System.out.println(product.getName() + " | Qty: " + qty + " | SubTotal: Rs. " + subTotal);
-		});
+	    	System.out.println(product.getName() + " | Qty: " + qty + " | SubTotal: Rs. " + subTotal);
+	    	});
+		
+	    }
 	}
 	
 	public double calculateTotal() {
@@ -89,7 +107,4 @@ public class CartManagement {
 		cart.clear();
 	}
 	
-	public boolean isCartEmpty() {
-		return cart.isEmpty();
-	}
 }

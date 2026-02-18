@@ -1,0 +1,119 @@
+package com.ecommerce.main;
+
+import java.util.List;
+import java.util.Scanner;
+
+import com.ecommerce.model.Products;
+import com.ecommerce.service.CartManagement;
+import com.ecommerce.service.CheckoutProcess;
+import com.ecommerce.service.ProductManagement;
+
+public class MainDriver {
+	
+	public static void main(String[] args) throws Exception {
+		Scanner sc = new Scanner(System.in);
+		Products product = null ;
+		ProductManagement productManagement = new ProductManagement();
+		CartManagement cartManagement = new CartManagement();
+		CheckoutProcess checkoutProcess = new CheckoutProcess();
+		
+		productManagement.addAllProducts();
+		
+		while(true) {
+			System.out.println("===== +++  WELCOME ! +++ ===== ");
+			System.out.println("1. View Products");
+			System.out.println("2. Search Product");
+			System.out.println("3. Sort By Price in Assending");
+			System.out.println("4. Sort By Price in Descending");
+			System.out.println("5. Add to Cart");
+			System.out.println("6. Remove from Cart");
+			System.out.println("7. View Cart");
+			System.out.println("8. Checkout");
+			System.out.println("9. Exit\n");
+			
+			int selectPreference = sc.nextInt();
+			
+			
+			switch(selectPreference)
+			{
+				case 1: 
+					productManagement.displayProducts();
+					break;
+				
+				case 2:
+				    System.out.println("Enter product name: ");
+				    sc.nextLine();
+				    String name = sc.nextLine();
+
+				    List<Products> results = productManagement.searchByName(name);
+				                
+				    results.forEach(System.out::println);
+				
+				    break;
+	
+				case 3:
+					productManagement.sortPriceAsc();
+					break;
+					
+				case 4:
+					productManagement.sortPriceDesc();
+					break;
+					
+				case 5:
+					System.out.println("Enter Product Id : ");
+					int id = sc.nextInt();
+					System.out.println("Enter quantity: " );
+					int qty = sc.nextInt();
+					try {
+					product = productManagement.getProductById(id);
+					
+					cartManagement.addToCart(product, qty);
+					System.out.println("Added to cart!");
+					} catch(Exception e) {
+						System.out.println("Not valid product,plz choose valid productId");
+					}
+					
+					break;
+					
+				case 6:
+					 System.out.println("Enter Product ID to remove:");
+					 int productId = sc.nextInt();
+					 
+					
+					 System.out.println("Enter number of product to remove: ");
+					 int removeId = sc.nextInt();
+					 try {
+					 product = productManagement.getProductById(productId);
+					 cartManagement.removeFromCart(product, removeId);
+					 } catch(Exception e) {
+						 System.out.println("Not ID or product found");
+					 }
+					 
+					 break;
+					    
+				case 7:
+					try {
+					cartManagement.viewCart();
+					}catch(Exception e)
+					{
+						System.out.println("No product is added");
+					}
+					break;
+					
+				case 8:
+					checkoutProcess.checkOut(cartManagement.getCart());
+					break;
+					
+				case 9: 
+					System.out.println("Thank you for shopping!...continue shopping");
+					return;
+				
+				default :
+					System.out.println("Invalid input");
+			}
+		//	sc.close();
+		} 
+		
+	} 
+	
+}

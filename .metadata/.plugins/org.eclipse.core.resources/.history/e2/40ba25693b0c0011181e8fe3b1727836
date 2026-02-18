@@ -1,0 +1,62 @@
+package com.ecommerce.service;
+
+import java.util.Map;
+
+import com.ecommerce.exception.OutOfStockException;
+import com.ecommerce.exception.ProductNotAvailableException;
+import com.ecommerce.model.Products;
+
+public class CheckoutProcess {
+	
+	ProductManagement productManagement = new ProductManagement();
+	CartManagement cartManagement = new CartManagement();
+	
+	public void checkOut(Map<Products,Integer> cart) throws OutOfStockException, ProductNotAvailableException
+	{
+		try {
+			if(cart.isEmpty())
+			{
+				throw new ProductNotAvailableException("Cart is empty, choose your product");
+			}
+		}
+		finally {
+			for(Map.Entry<Products, Integer> entry: cart.entrySet()) {
+				Products product = entry.getKey();
+				int quantity = entry.getValue();
+			
+				if( quantity > product.getStock() ) {
+				throw new OutOfStockException(product.getName() + " is out of stock");
+				}
+			}
+		
+			System.out.println("------- Final Bill -------");
+
+		    double totalPrice = 0.0;
+		    double gst = 0.10;
+		    for (Map.Entry<Products, Integer> entry : cart.entrySet()) {
+
+		        Products product = entry.getKey();
+		        int quantity = entry.getValue();
+
+		        double subtotal = product.getPrice() * quantity;
+		        totalPrice += subtotal + (subtotal * gst);
+		       
+		        System.out.println(product.getName()
+		                + " | Qty: " + quantity
+		                + " | Subtotal: Rs." + subtotal);
+		    }
+
+		    System.out.println("======================");
+		    System.out.println("Total Amount: Rs." + totalPrice);
+
+			cartManagement.reduceStock();
+		
+			cart.clear();
+		
+			System.out.println("Checkout successful!");
+		
+		}	
+	}
+}
+	
+
